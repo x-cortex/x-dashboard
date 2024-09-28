@@ -1,8 +1,8 @@
 <script>
-	import { onMount } from 'svelte';
+	import { BackgroundGradient } from '$lib/components/ui';
 	import { Card } from '$lib/components/ui/card';
 	import supabase from '$lib/db/db';
-	import { BackgroundGradient } from '$lib/components/ui';
+	import { onMount } from 'svelte';
 
 	// @ts-ignore
 	let data = []; // Initialize data as an empty array
@@ -36,14 +36,22 @@
 		console.log('All unique recipients:', allRecipients);
 	};
 
+	let selectedDetail = null;
+
 	// @ts-ignore
 	const handleCardClick = (recipient) => {
 		current_recipient = recipient;
 		// Filter data to get the current recipient's details
 		// @ts-ignore
 		current_recipient_details = data.filter((item) => item.recipient === recipient).reverse();
+		selectedDetail = null; // Reset selected detail when changing recipient
 		console.log('Current recipient:', current_recipient);
 		console.log('Current recipient details:', current_recipient_details);
+	};
+
+	// @ts-ignore
+	const handleDetailClick = (detail) => {
+		selectedDetail = detail;
 	};
 </script>
 
@@ -52,24 +60,49 @@
 {JSON.stringify(current_recipient)} -->
 
 {#if current_recipient}
-	<h2 class="mb-4 text-2xl font-bold">Current Recipient Details</h2>
-	<div class="space-y-4">
-		{#each current_recipient_details as detail}
-			<Card class="w-96 p-4">
-				<div on:click={() => (detail.expanded = !detail.expanded)} class="cursor-pointer">
-					<p><strong>Response:</strong> {detail.response}</p>
-					<p><strong>Timestamp:</strong> {detail.timestamp}</p>
-					{#if detail.expanded}
-						<p><strong>ID:</strong> {detail.id}</p>
-						<p><strong>Created At:</strong> {detail.created_at}</p>
-						<p><strong>Recipient:</strong> {detail.recipient}</p>
-						<p><strong>Last Chat:</strong> {detail.last_chat}</p>
-						<p><strong>Route:</strong> {detail.route}</p>
-					{/if}
-				</div>
-			</Card>
-		{/each}
-	</div>
+	<section class="flex w-full justify-around">
+		<div
+			class="ml-20 flex max-h-[800px] flex-col justify-center space-y-4 overflow-y-auto p-10 pt-40"
+		>
+			{#each current_recipient_details as detail}
+				<!-- Skip the first item -->
+				<Card class="m-2 w-96 p-4">
+					<div
+						on:click={() => handleDetailClick(detail)}
+						class="flex h-full cursor-pointer flex-col justify-between"
+					>
+						<p class="flex-1"><strong>Response:</strong> {detail.response}</p>
+						<p class="flex-1"><strong>Timestamp:</strong> {detail.timestamp}</p>
+					</div>
+				</Card>
+			{/each}
+		</div>
+		<div class="flex max-h-[800px] flex-col items-center justify-start pt-8">
+			<div
+				class="flex h-full max-h-[700px] w-full min-w-[800px] max-w-[800px] flex-col border bg-white p-8 pt-10 dark:border-gray-700 dark:bg-[#09090B]"
+			>
+				{#if selectedDetail}
+					<h3 class="mb-4 text-3xl font-semibold text-gray-900 dark:text-white">Selected Detail</h3>
+					{#each Object.entries(selectedDetail) as [key, value]}
+						<div
+							class="mb-4 rounded-lg border border-gray-200 bg-white p-2 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+						>
+							<p class="overflow-hidden text-ellipsis whitespace-nowrap">
+								<strong class="text-wrap text-lg font-medium text-gray-800 dark:text-gray-200"
+									>{key}:</strong
+								>
+								<span class="text-wrap text-base text-gray-600 dark:text-gray-400">{value}</span>
+							</p>
+						</div>
+					{/each}
+				{:else}
+					<p class="mt-4 text-center text-lg text-gray-500 dark:text-gray-400">
+						Select a Card to view more information
+					</p>
+				{/if}
+			</div>
+		</div>
+	</section>
 {:else}
 	<div class="container mx-auto max-w-7xl space-y-12 px-4 py-8 sm:px-6 lg:px-8">
 		<section>
