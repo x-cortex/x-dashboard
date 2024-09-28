@@ -53,6 +53,12 @@
 	const handleDetailClick = (detail) => {
 		selectedDetail = detail;
 	};
+
+	const handleBackClick = () => {
+		current_recipient = null;
+		current_recipient_details = null;
+		selectedDetail = null;
+	};
 </script>
 
 <!-- Remove or comment out this line -->
@@ -61,12 +67,33 @@
 
 {#if current_recipient}
 	<section class="flex w-full justify-around">
+		<button
+			on:click={handleBackClick}
+			class="dark:hover:bg-gray-800Response absolute left-4 top-20 flex items-center rounded-md border border-gray-200 bg-white px-4 py-2 text-gray-800 transition-colors hover:bg-gray-300 dark:border-gray-600 dark:bg-zinc-900 dark:text-gray-200"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="mr-2 h-5 w-5"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M15 12H3m0 0l6-6m-6 6l6 6"
+				/>
+			</svg>
+		</button>
 		<div
-			class="ml-20 flex max-h-[800px] flex-col justify-center space-y-4 overflow-y-auto p-10 pt-40"
+			class="ml-20 flex max-h-[800px] flex-col justify-center space-y-4 overflow-y-auto p-10 pt-96"
 		>
 			{#each current_recipient_details as detail}
 				<!-- Skip the first item -->
-				<Card class="m-2 w-96 p-4">
+				<BackgroundGradient
+					className="rounded-[22px] p-6 bg-white dark:bg-zinc-900 max-w-sm mx-auto w-full"
+				>
 					<div
 						on:click={() => handleDetailClick(detail)}
 						class="flex h-full cursor-pointer flex-col justify-between"
@@ -74,12 +101,12 @@
 						<p class="flex-1"><strong>Response:</strong> {detail.response}</p>
 						<p class="flex-1"><strong>Timestamp:</strong> {detail.timestamp}</p>
 					</div>
-				</Card>
+				</BackgroundGradient>
 			{/each}
 		</div>
 		<div class="flex max-h-[800px] flex-col items-center justify-start pt-8">
-			<div
-				class="flex h-full max-h-[700px] w-full min-w-[800px] max-w-[800px] flex-col border bg-white p-8 pt-10 dark:border-gray-700 dark:bg-[#09090B]"
+			<BackgroundGradient
+				className="flex h-full min-h-[700px] w-full min-w-[800px] max-w-[800px] flex-col p-8 pt-10 rounded-[22px] bg-white dark:bg-zinc-900 mx-auto "
 			>
 				{#if selectedDetail}
 					<h3 class="mb-4 text-3xl font-semibold text-gray-900 dark:text-white">Selected Detail</h3>
@@ -100,7 +127,7 @@
 						Select a Card to view more information
 					</p>
 				{/if}
-			</div>
+			</BackgroundGradient>
 		</div>
 	</section>
 {:else}
