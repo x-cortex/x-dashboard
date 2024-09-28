@@ -1,5 +1,5 @@
 <script>
-	import { BackgroundGradient } from '$lib/components/ui';
+	import { BackgroundGradient, BackgroundGradientLess } from '$lib/components/ui';
 	import { Card } from '$lib/components/ui/card';
 	import supabase from '$lib/db/db';
 	import { onMount } from 'svelte';
@@ -91,7 +91,7 @@
 		>
 			{#each current_recipient_details as detail}
 				<!-- Skip the first item -->
-				<BackgroundGradient
+				<BackgroundGradientLess
 					className="rounded-[22px] p-6 bg-white dark:bg-zinc-900 max-w-sm mx-auto w-full"
 				>
 					<div
@@ -101,7 +101,7 @@
 						<p class="flex-1"><strong>Response:</strong> {detail.response}</p>
 						<p class="flex-1"><strong>Timestamp:</strong> {detail.timestamp}</p>
 					</div>
-				</BackgroundGradient>
+				</BackgroundGradientLess>
 			{/each}
 		</div>
 		<div class="flex max-h-[800px] flex-col items-center justify-start pt-8">
