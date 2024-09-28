@@ -32,7 +32,15 @@
 	const updateAllRecipients = () => {
 		// Create a Set of unique recipients, then convert it back to an array
 		// @ts-ignore
-		allRecipients = [...new Set(data.map((item) => item.recipient))];
+		allRecipients = [
+			...new Set(
+				data
+					.slice()
+					.reverse()
+					.map((item) => item.recipient)
+			)
+		];
+		// allRecipients = [...new Set(data.map((item) => item.recipient))];
 		console.log('All unique recipients:', allRecipients);
 	};
 
@@ -133,7 +141,9 @@
 {:else}
 	<div class="container mx-auto max-w-7xl space-y-12 px-4 py-8 sm:px-6 lg:px-8">
 		<section>
-			<h2 class="mb-6 text-3xl font-bold">Whatsapp</h2>
+			<h2 class="mb-6 text-3xl font-bold">
+				Whatsapp <a href="/schedule" class="text-blue-500">(schedule)</a>
+			</h2>
 			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 				{#each allRecipients as recipient, i}
 					<BackgroundGradient
